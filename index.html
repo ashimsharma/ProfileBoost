@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Boost - A Job Search Partner</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="header">
+    <h1>Resume Matcher</h1>
+    <p>Tailor your resume to any job</p>
+  </div>
+
+  <div class="container">
+    <div class="instruction">
+      💡 Select job description text on the page, then click "Analyze Selection"
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="section">
+      <div class="section-title">Your Resume</div>
+      <label for="resumeUpload" class="upload-area" id="uploadArea">
+        <div class="upload-icon">📄</div>
+        <div class="upload-text" id="uploadText">Click to upload your resume (PDF or TXT)</div>
+        <div class="file-name" id="fileName"></div>
+      </label>
+      <input type="file" id="resumeUpload" accept=".pdf,.txt">
+    </div>
+
+    <div class="section">
+      <div class="section-title">API Key</div>
+      <input 
+        type="password" 
+        id="apiKey" 
+        class="api-key-input" 
+        placeholder="Enter your OpenAI API key"
+      >
+      <button class="btn btn-secondary" id="saveApiKey">Save API Key</button>
+    </div>
+
+    <div class="section">
+      <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze Selection</button>
+      <button class="btn btn-secondary" id="captureBtn" disabled>Capture Screenshot</button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="section">
+        <div class="section-title">Recommendations</div>
+        <div id="suggestions"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

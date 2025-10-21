@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ResumeGenius.AI - AI-Powered Resume Builder & Job Match Optimizer">
+    <title>ResumeGenius.AI - Intelligent Resume Builder</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-blue-600">ResumeGenius.AI</h1>
+                    <span class="ml-3 px-2 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">Beta</span>
+                </div>
+                <nav class="flex items-center space-x-4">
+                    <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Toggle dark mode">
+                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    <button id="saveBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Save
+                    </button>
+                    <button id="exportBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
+                        Export
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Tab Navigation -->
+        <div class="bg-white rounded-lg shadow-sm mb-6">
+            <nav class="flex border-b border-gray-200" role="tablist">
+                <button 
+                    class="tab-button px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600"
+                    data-tab="builder"
+                    role="tab"
+                    aria-selected="true">
+                    Resume Builder
+                </button>
+                <button 
+                    class="tab-button px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent"
+                    data-tab="optimizer"
+                    role="tab"
+                    aria-selected="false">
+                    AI Optimizer
+                </button>
+                <button 
+                    class="tab-button px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent"
+                    data-tab="templates"
+                    role="tab"
+                    aria-selected="false">
+                    Templates
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Left Column: Input Forms -->
+            <div class="space-y-6">
+                
+                <!-- Builder Tab -->
+                <div id="builder-tab" class="tab-content">
+                    
+                    <!-- Resume Type Selection -->
+                    <section class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Select Resume Type</h2>
+                        <p class="text-gray-600 mb-4">Which resume format best suits your career goals?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="resume-type-card cursor-pointer">
+                                <input type="radio" name="resumeType" value="chronological" class="sr-only" checked>
+                                <div class="resume-type-option p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition">
+                                    <h3 class="font-semibold text-gray-900 mb-2">Chronological</h3>
+                                    <p class="text-sm text-gray-600">Emphasizes work history</p>
+                                </div>
+                            </label>
+                            <label class="resume-type-card cursor-pointer">
+                                <input type="radio" name="resumeType" value="functional" class="sr-only">
+                                <div class="resume-type-option p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition">
+                                    <h3 class="font-semibold text-gray-900 mb-2">Functional</h3>
+                                    <p class="text-sm text-gray-600">Emphasizes skills</p>
+                                </div>
+                            </label>
+                            <label class="resume-type-card cursor-pointer">
+                                <input type="radio" name="resumeType" value="combination" class="sr-only">
+                                <div class="resume-type-option p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition">
+                                    <h3 class="font-semibold text-gray-900 mb-2">Combination</h3>
+                                    <p class="text-sm text-gray-600">Balanced approach</p>
+                                </div>
+                            </label>
+                            <label class="resume-type-card cursor-pointer">
+                                <input type="radio" name="resumeType" value="targeted" class="sr-only">
+                                <div class="resume-type-option p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition">
+                                    <h3 class="font-semibold text-gray-900 mb-2">Targeted</h3>
+                                    <p class="text-sm text-gray-600">Customized for specific roles</p>
+                                </div>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Resume Form Sections -->
+                    <form id="resumeForm" class="space-y-6">
+                        
+                        <!-- Personal Information -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="true">
+                                <h2 class="text-xl font-semibold text-gray-900">Personal Information</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                                        <input type="text" id="fullName" name="fullName" required 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            placeholder="John Doe">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                        <input type="email" id="email" name="email" required 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            placeholder="john.doe@example.com">
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                                        <input type="tel" id="phone" name="phone" required 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            placeholder="+1 (555) 123-4567">
+                                    </div>
+                                    <div>
+                                        <label for="linkedin" class="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
+                                        <input type="url" id="linkedin" name="linkedin" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            placeholder="linkedin.com/in/johndoe">
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label for="portfolio" class="block text-sm font-medium text-gray-700 mb-1">Portfolio URL</label>
+                                        <input type="url" id="portfolio" name="portfolio" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            placeholder="https://johndoe.com">
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Professional Summary -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="true">
+                                <h2 class="text-xl font-semibold text-gray-900">Professional Summary</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0">
+                                <textarea id="summary" name="summary" rows="4" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="A brief overview of your professional background and career objectives..."></textarea>
+                                <button type="button" class="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium ai-generate-btn" data-field="summary">
+                                    ✨ Generate with AI
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Work Experience -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="true">
+                                <h2 class="text-xl font-semibold text-gray-900">Work Experience</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0" id="workExperienceContainer">
+                                <!-- Work experience entries will be added here dynamically -->
+                            </div>
+                            <div class="px-6 pb-6">
+                                <button type="button" id="addWorkExperience" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+                                    + Add Work Experience
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Education -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="true">
+                                <h2 class="text-xl font-semibold text-gray-900">Education</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0" id="educationContainer">
+                                <!-- Education entries will be added here dynamically -->
+                            </div>
+                            <div class="px-6 pb-6">
+                                <button type="button" id="addEducation" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+                                    + Add Education
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Skills -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="true">
+                                <h2 class="text-xl font-semibold text-gray-900">Skills</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0">
+                                <div class="mb-4">
+                                    <label for="skillInput" class="block text-sm font-medium text-gray-700 mb-1">Add Skills</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="skillInput" 
+                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            placeholder="e.g., JavaScript, Project Management">
+                                        <button type="button" id="addSkill" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="skillsContainer" class="flex flex-wrap gap-2">
+                                    <!-- Skills will be added here as tags -->
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Projects -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="false">
+                                <h2 class="text-xl font-semibold text-gray-900">Projects</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0 hidden" id="projectsContainer">
+                                <!-- Project entries will be added here dynamically -->
+                            </div>
+                            <div class="px-6 pb-6 hidden project-add-btn">
+                                <button type="button" id="addProject" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+                                    + Add Project
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Certifications -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="false">
+                                <h2 class="text-xl font-semibold text-gray-900">Certifications & Awards</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0 hidden" id="certificationsContainer">
+                                <!-- Certification entries will be added here dynamically -->
+                            </div>
+                            <div class="px-6 pb-6 hidden certification-add-btn">
+                                <button type="button" id="addCertification" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+                                    + Add Certification
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Languages -->
+                        <section class="collapsible-section bg-white rounded-lg shadow-sm">
+                            <button type="button" class="section-header w-full flex justify-between items-center p-6 text-left" aria-expanded="false">
+                                <h2 class="text-xl font-semibold text-gray-900">Languages</h2>
+                                <svg class="w-6 h-6 text-gray-500 transform transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="section-content p-6 pt-0 hidden" id="languagesContainer">
+                                <!-- Language entries will be added here dynamically -->
+                            </div>
+                            <div class="px-6 pb-6 hidden language-add-btn">
+                                <button type="button" id="addLanguage" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+                                    + Add Language
+                                </button>
+                            </div>
+                        </section>
+
+                    </form>
+                </div>
+
+                <!-- Optimizer Tab -->
+                <div id="optimizer-tab" class="tab-content hidden">
+                    <section class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-4">AI Resume Optimizer</h2>
+                        
+                        <!-- Resume Input Methods -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">1. Input Your Resume</h3>
+                            <div class="space-y-3">
+                                <button type="button" id="useBuilderResume" class="w-full py-3 px-4 bg-blue-50 border-2 border-blue-200 rounded-lg text-left hover:bg-blue-100 transition">
+                                    <span class="font-medium text-blue-900">Use Resume from Builder</span>
+                                    <p class="text-sm text-blue-700 mt-1">Use the resume you're currently creating</p>
+                                </button>
+                                <label class="block w-full py-3 px-4 bg-gray-50 border-2 border-gray-200 rounded-lg text-left hover:bg-gray-100 transition cursor-pointer">
+                                    <span class="font-medium text-gray-900">Upload Resume File</span>
+                                    <p class="text-sm text-gray-600 mt-1">PDF, DOCX, or TXT format</p>
+                                    <input type="file" id="resumeUpload" accept=".pdf,.docx,.txt" class="hidden">
+                                </label>
+                                <button type="button" id="pasteResume" class="w-full py-3 px-4 bg-gray-50 border-2 border-gray-200 rounded-lg text-left hover:bg-gray-100 transition">
+                                    <span class="font-medium text-gray-900">Paste Resume Text</span>
+                                    <p class="text-sm text-gray-600 mt-1">Copy and paste your resume content</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Job Description Input -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">2. Target Job Description</h3>
+                            <textarea id="jobDescription" rows="6" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Paste the job description here..."></textarea>
+                        </div>
+
+                        <!-- Optimization Options -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">3. Select AI Features</h3>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="optimization-option w-4 h-4 text-blue-600 rounded" data-api="prompt" checked>
+                                    <span class="ml-2 text-gray-700">Generate tailored professional summary</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="optimization-option w-4 h-4 text-blue-600 rounded" data-api="proofreader" checked>
+                                    <span class="ml-2 text-gray-700">Fix grammar and spelling</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="optimization-option w-4 h-4 text-blue-600 rounded" data-api="rewriter" checked>
+                                    <span class="ml-2 text-gray-700">Enhance impact statements</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="optimization-option w-4 h-4 text-blue-600 rounded" data-api="summarizer">
+                                    <span class="ml-2 text-gray-700">Condense lengthy descriptions</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Optimize Button -->
+                        <button type="button" id="optimizeResume" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold text-lg">
+                            ✨ Optimize with AI
+                        </button>
+
+                        <!-- Results Container -->
+                        <div id="optimizationResults" class="mt-6 hidden">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Optimization Results</h3>
+                            
+                            <!-- Keyword Match Score -->
+                            <div class="mb-4 p-4 bg-blue-50 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium text-gray-900">Keyword Match Score</span>
+                                    <span id="matchScore" class="text-2xl font-bold text-blue-600">--</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div id="matchScoreBar" class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- ATS Compatibility -->
+                            <div class="mb-4 p-4 bg-green-50 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-medium text-gray-900">ATS Compatibility</span>
+                                    <span id="atsScore" class="text-lg font-semibold text-green-600">--</span>
+                                </div>
+                            </div>
+
+                            <!-- Missing Keywords -->
+                            <div class="mb-4">
+                                <h4 class="font-medium text-gray-900 mb-2">Missing Keywords</h4>
+                                <div id="missingKeywords" class="flex flex-wrap gap-2">
+                                    <!-- Keywords will be added here -->
+                                </div>
+                            </div>
+
+                            <!-- Suggestions -->
+                            <div class="mb-4">
+                                <h4 class="font-medium text-gray-900 mb-2">AI Suggestions</h4>
+                                <div id="suggestions" class="space-y-2">
+                                    <!-- Suggestions will be added here -->
+                                </div>
+                            </div>
+
+                            <!-- Before/After Comparison -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-medium text-gray-900 mb-2">Original</h4>
+                                    <div id="originalContent" class="p-3 bg-gray-50 rounded-lg text-sm max-h-64 overflow-y-auto"></div>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900 mb-2">Optimized</h4>
+                                    <div id="optimizedContent" class="p-3 bg-green-50 rounded-lg text-sm max-h-64 overflow-y-auto"></div>
+                                </div>
+                            </div>
+
+                            <!-- Apply Changes Button -->
+                            <button type="button" id="applyOptimization" class="w-full mt-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+                                Apply Changes to Resume
+                            </button>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Templates Tab -->
+                <div id="templates-tab" class="tab-content hidden">
+                    <section class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Resume Templates</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="templatesContainer">
+                            <!-- Templates will be added here dynamically -->
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Live Preview -->
+            <div class="sticky top-24 h-fit">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900">Live Preview</h2>
+                        <select id="templateSelector" class="px-3 py-1 border border-gray-300 rounded-lg text-sm">
+                            <option value="minimalist">Minimalist</option>
+                            <option value="modern">Modern</option>
+                            <option value="classic">Classic</option>
+                            <option value="executive">Executive</option>
+                        </select>
+                    </div>
+                    <div id="resumePreview" class="preview-container border border-gray-200 rounded-lg p-8 bg-white min-h-[600px] shadow-inner">
+                        <!-- Live resume preview will be rendered here -->
+                        <div class="text-center text-gray-400 py-20">
+                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p>Start filling the form to see your resume preview</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-900">Export Resume</h3>
+                <button id="closeExportModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <button id="exportPDF" class="w-full py-3 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium">
+                    Export as PDF
+                </button>
+                <button id="exportDOCX" class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    Export as DOCX
+                </button>
+                <button id="exportTXT" class="w-full py-3 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-medium">
+                    Export as Plain Text
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg hidden transform transition-all duration-300">
+        <p id="toastMessage"></p>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 flex items-center space-x-4">
+            <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="text-gray-900 font-medium">Processing with AI...</span>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/main.js"></script>
+    
+    <!-- External Libraries (loaded on demand) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js" defer></script>
+
+</body>
+</html>

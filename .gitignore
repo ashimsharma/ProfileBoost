@@ -44,3 +44,4 @@ coverage/
 # Debug files
 npm-debug.log*
 yarn-debug.log*
+PROJECT_SUMMARY.txt

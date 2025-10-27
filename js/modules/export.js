@@ -2,6 +2,7 @@
 export class ExportManager {
     constructor(previewManager) {
         this.previewManager = previewManager;
+        this.LIBRARY_LOAD_DELAY_MS = 100; // Time to wait after loading external library
     }
 
     /**
@@ -15,8 +16,8 @@ export class ExportManager {
             // Try loading dynamically
             try {
                 await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-                // Wait a bit for the library to initialize
-                await new Promise(resolve => setTimeout(resolve, 100));
+                // Wait for the library to initialize
+                await new Promise(resolve => setTimeout(resolve, this.LIBRARY_LOAD_DELAY_MS));
             } catch (error) {
                 throw new Error('jsPDF library could not be loaded');
             }
@@ -91,8 +92,8 @@ export class ExportManager {
             // Try loading dynamically
             try {
                 await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js');
-                // Wait a bit for the library to initialize
-                await new Promise(resolve => setTimeout(resolve, 100));
+                // Wait for the library to initialize
+                await new Promise(resolve => setTimeout(resolve, this.LIBRARY_LOAD_DELAY_MS));
             } catch (error) {
                 throw new Error('docx library could not be loaded');
             }

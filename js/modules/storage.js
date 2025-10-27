@@ -10,8 +10,8 @@ export class StorageManager {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.dbVersion);
 
-            // Add timeout handler
-            const timeout = setTimeout(() => {
+            // Add timeout handler (will be extended if upgrade is needed)
+            let timeout = setTimeout(() => {
                 reject(new Error('IndexedDB initialization timeout'));
             }, 5000);
 
@@ -29,6 +29,12 @@ export class StorageManager {
             };
 
             request.onupgradeneeded = (event) => {
+                // Clear the existing timeout and set a longer one for upgrade
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    reject(new Error('IndexedDB upgrade timeout'));
+                }, 10000);
+                
                 const db = event.target.result;
 
                 // Create resumes store

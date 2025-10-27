@@ -14,12 +14,12 @@ export class AIIntegrations {
 
     async checkCapabilities() {
         try {
-            this.capabilities.prompt = typeof window.ai?.createTextSession === 'function';
-            this.capabilities.writer = typeof window.ai?.writer === 'object';
-            this.capabilities.rewriter = typeof window.ai?.rewriter === 'object';
-            this.capabilities.summarizer = typeof window.ai?.summarizer === 'object';
-            this.capabilities.translator = typeof window.ai?.translator === 'object';
-            this.capabilities.proofreader = typeof window.ai?.proofreader === 'object';
+            this.capabilities.prompt = window.ai && typeof window.ai.createTextSession === 'function';
+            this.capabilities.writer = window.ai && typeof window.ai.writer === 'object';
+            this.capabilities.rewriter = window.ai && typeof window.ai.rewriter === 'object';
+            this.capabilities.summarizer = window.ai && typeof window.ai.summarizer === 'object';
+            this.capabilities.translator = window.ai && typeof window.ai.translator === 'object';
+            this.capabilities.proofreader = window.ai && typeof window.ai.proofreader === 'object';
         } catch (error) {
             console.error('Error checking AI capabilities:', error);
         }

@@ -24,7 +24,7 @@ class App {
         // Register service worker
         if ('serviceWorker' in navigator) {
             try {
-                const registration = await navigator.serviceWorker.register('/service-worker.js');
+                const registration = await navigator.serviceWorker.register('./service-worker.js');
                 console.log('Service Worker registered:', registration);
             } catch (error) {
                 console.error('Service Worker registration failed:', error);
@@ -40,6 +40,9 @@ class App {
         this.resumeBuilder = new ResumeBuilder(this.previewManager, this.storageManager);
         this.optimizerManager = new OptimizerManager();
         this.exportManager = new ExportManager(this.previewManager);
+
+        // Make methods globally accessible for inline onclick handlers
+        window.app = this;
 
         // Setup event listeners
         this.setupEventListeners();
@@ -242,12 +245,12 @@ class App {
     async checkAICapabilities() {
         // Check if Chrome Built-in AI APIs are available
         const aiStatus = {
-            prompt: typeof window.ai?.createTextSession === 'function',
-            writer: typeof window.ai?.writer === 'object',
-            rewriter: typeof window.ai?.rewriter === 'object',
-            summarizer: typeof window.ai?.summarizer === 'object',
-            translator: typeof window.ai?.translator === 'object',
-            proofreader: typeof window.ai?.proofreader === 'object'
+            prompt: window.ai && typeof window.ai.createTextSession === 'function',
+            writer: window.ai && typeof window.ai.writer === 'object',
+            rewriter: window.ai && typeof window.ai.rewriter === 'object',
+            summarizer: window.ai && typeof window.ai.summarizer === 'object',
+            translator: window.ai && typeof window.ai.translator === 'object',
+            proofreader: window.ai && typeof window.ai.proofreader === 'object'
         };
 
         console.log('AI Capabilities:', aiStatus);
@@ -268,12 +271,10 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         const app = new App();
         app.init();
-        window.app = app; // Make app globally accessible for debugging
     });
 } else {
     const app = new App();
     app.init();
-    window.app = app;
 }
 
 // Export for module usage

@@ -12,7 +12,19 @@ export class ExportManager {
     async exportToPDF(resumeData) {
         // Check if jsPDF is loaded
         if (typeof window.jspdf === 'undefined') {
-            throw new Error('jsPDF library not loaded');
+            // Try loading dynamically
+            try {
+                await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+                // Wait a bit for the library to initialize
+                await new Promise(resolve => setTimeout(resolve, 100));
+            } catch (error) {
+                throw new Error('jsPDF library could not be loaded');
+            }
+            
+            // Check again after loading
+            if (typeof window.jspdf === 'undefined') {
+                throw new Error('jsPDF library not loaded');
+            }
         }
 
         const { jsPDF } = window.jspdf;
@@ -76,7 +88,19 @@ export class ExportManager {
     async exportToDOCX(resumeData) {
         // Check if docx library is loaded
         if (typeof window.docx === 'undefined') {
-            throw new Error('docx library not loaded');
+            // Try loading dynamically
+            try {
+                await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js');
+                // Wait a bit for the library to initialize
+                await new Promise(resolve => setTimeout(resolve, 100));
+            } catch (error) {
+                throw new Error('docx library could not be loaded');
+            }
+            
+            // Check again after loading
+            if (typeof window.docx === 'undefined') {
+                throw new Error('docx library not loaded');
+            }
         }
 
         const { Document, Packer, Paragraph, TextRun, HeadingLevel } = window.docx;
@@ -400,6 +424,16 @@ export class ExportManager {
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
+    }
+
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+            document.head.appendChild(script);
+        });
     }
 
     generateFileName(resumeData, extension) {

@@ -10,12 +10,19 @@ export class StorageManager {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.dbVersion);
 
+            // Add timeout handler
+            const timeout = setTimeout(() => {
+                reject(new Error('IndexedDB initialization timeout'));
+            }, 5000);
+
             request.onerror = () => {
+                clearTimeout(timeout);
                 console.error('Error opening database:', request.error);
                 reject(request.error);
             };
 
             request.onsuccess = () => {
+                clearTimeout(timeout);
                 this.db = request.result;
                 console.log('Database opened successfully');
                 resolve(this.db);

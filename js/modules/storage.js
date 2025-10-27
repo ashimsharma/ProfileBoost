@@ -4,6 +4,8 @@ export class StorageManager {
         this.dbName = 'ResumeGeniusDB';
         this.dbVersion = 1;
         this.db = null;
+        this.INIT_TIMEOUT_MS = 5000;
+        this.UPGRADE_TIMEOUT_MS = 10000;
     }
 
     async init() {
@@ -13,7 +15,7 @@ export class StorageManager {
             // Add timeout handler (will be extended if upgrade is needed)
             let timeout = setTimeout(() => {
                 reject(new Error('IndexedDB initialization timeout'));
-            }, 5000);
+            }, this.INIT_TIMEOUT_MS);
 
             request.onerror = () => {
                 clearTimeout(timeout);
@@ -33,7 +35,7 @@ export class StorageManager {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
                     reject(new Error('IndexedDB upgrade timeout'));
-                }, 10000);
+                }, this.UPGRADE_TIMEOUT_MS);
                 
                 const db = event.target.result;
 

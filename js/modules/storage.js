@@ -4,24 +4,39 @@ export class StorageManager {
         this.dbName = 'ResumeGeniusDB';
         this.dbVersion = 1;
         this.db = null;
+        this.INIT_TIMEOUT_MS = 5000;
+        this.UPGRADE_TIMEOUT_MS = 10000;
     }
 
     async init() {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.dbVersion);
 
+            // Add timeout handler (will be extended if upgrade is needed)
+            let timeout = setTimeout(() => {
+                reject(new Error('IndexedDB initialization timeout'));
+            }, this.INIT_TIMEOUT_MS);
+
             request.onerror = () => {
+                clearTimeout(timeout);
                 console.error('Error opening database:', request.error);
                 reject(request.error);
             };
 
             request.onsuccess = () => {
+                clearTimeout(timeout);
                 this.db = request.result;
                 console.log('Database opened successfully');
                 resolve(this.db);
             };
 
             request.onupgradeneeded = (event) => {
+                // Clear the existing timeout and set a longer one for upgrade
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    reject(new Error('IndexedDB upgrade timeout'));
+                }, this.UPGRADE_TIMEOUT_MS);
+                
                 const db = event.target.result;
 
                 // Create resumes store
